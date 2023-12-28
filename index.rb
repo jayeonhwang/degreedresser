@@ -1,13 +1,16 @@
 require "http"
+require "pastel"
 
-puts "   _                       _                         
+pastel =Pastel.new
+
+puts pastel.magenta("   _                       _                         
 _| |___ ___ ___ ___ ___ _| |___ ___ ___ ___ ___ ___ 
 | . | -_| . |  _| -_| -_| . |  _| -_|_ -|_ -| -_|  _|
 |___|___|_  |_| |___|___|___|_| |___|___|___|___|_|  
-       |___|                                        "
+       |___|                                        ")
 
-puts "please enter your location:"
-location = gets.chomp
+puts pastel.blue("please enter your location (city name or zip code):")
+location = gets.chomp 
 
 
 data = HTTP.get("http://api.weatherstack.com/current?access_key=#{ENV['API_KEY']}&query= #{location}&units=f").parse
@@ -21,6 +24,15 @@ puts city_name
 puts current_hour
 puts description
 puts temp
+
+string_desc = description[0]
+
+if string_desc.downcase.include?("rain")
+  puts'🌧️'
+elsif string_desc.downcase.include?("rain")
+  puts'🌨️'
+end
+
 
 if temp >= 90 
   puts ' 🩳 🧢 👙 🕶️ 👚'
