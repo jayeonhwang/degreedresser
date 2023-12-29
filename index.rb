@@ -8,7 +8,7 @@ puts pastel.magenta("   _                       _
 _| |___ ___ ___ ___ ___ _| |___ ___ ___ ___ ___ ___ 
 | . | -_| . |  _| -_| -_| . |  _| -_|_ -|_ -| -_|  _|
 |___|___|_  |_| |___|___|___|_| |___|___|___|___|_|  
-       |___|                                        ")
+       |___|                                       ")
 
 puts pastel.blue("please enter your location (city name or zip code):")
 location = gets.chomp 
@@ -61,9 +61,8 @@ def clothes(degree)
 end
 
 
-
-box = TTY::Box.frame(width: 50, height: 10, border: :thick, align: :center, padding: 2, title: {top: "#{city_name}"}) do
-"#{current_hour}\n#{description[0]}\n#{weather(description)}\n#{temp}\n#{clothes(temp)}"
+box = TTY::Box.frame(width: 50, height: 13, border: :thick, align: :center, padding: 2) do
+"#{city_name}\n#{current_hour}\n#{description[0]}\n#{weather(description)}\n#{temp}\n#{clothes(temp)}"
 end
 
-puts box
+puts pastel.decorate(box, :cyan, :bold)
