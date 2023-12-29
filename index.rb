@@ -1,5 +1,6 @@
 require "http"
 require "pastel"
+require "tty-box"
 
 pastel =Pastel.new
 
@@ -17,46 +18,52 @@ data = HTTP.get("http://api.weatherstack.com/current?access_key=#{ENV['API_KEY']
 temp = data["current"]["temperature"]
 description = data["current"]["weather_descriptions"]
 current_hour = data["location"]["localtime"]
-
 city_name = data["location"]["name"]
 
-puts city_name
-puts current_hour
-puts description
-puts temp
 
-string_desc = description[0]
 
-if string_desc.downcase.include?("rain")
-  puts'🌧️'
-elsif string_desc.downcase.include?("rain")
-  puts'🌨️'
+def weather(desc)
+  string_desc = desc[0]
+  
+  if string_desc.downcase.include?("rain")
+    return '🌧️'
+  elsif string_desc.downcase.include?("rain")
+    return '🌨️'
+  end
 end
 
 
-if temp >= 90 
-  puts ' 🩳 🧢 👙 🕶️ 👚'
-
-elsif temp >= 70
-  puts ' 🩳 👕 🧢'
-
-elsif temp >= 65
-  puts'👕 👖 👟'
-
-elsif temp >= 50
-  puts' 👔 👖 👟'
-
-elsif temp>= 40
-  puts'👔 👖 🥼 🧦 👟'
-
-elsif temp>= 30
-  puts '👔 👖 🥼 🧥 🧦 🥾'
-
-elsif temp>= 20
-  puts'👔 👖 🧥 🧦 🧣 🥾 👢'
-
-else 
-  puts '👔 👖 🧥 🧦 🧣 🥾 👢 🧤'
+def clothes(degree)
+  if degree >= 90 
+    return ' 🩳 🧢 👙 🕶️ 👚'
+    
+  elsif degree >= 70
+    return ' 🩳 👕 🧢'
+    
+  elsif degree >= 65
+    return'👕 👖 👟'
+    
+  elsif degree >= 50
+    return' 👔 👖 👟'
+    
+  elsif degree>= 40
+    return'👔 👖 🥼 🧦 👟'
+    
+  elsif degree>= 30
+    return '👔 👖 🥼 🧥 🧦 🥾'
+    
+  elsif degree>= 20
+    return'👔 👖 🧥 🧦 🧣 🥾 👢'
+    
+  else 
+    return '👔 👖 🧥 🧦 🧣 🥾 👢 🧤'
+  end
 end
 
- 
+
+
+box = TTY::Box.frame(width: 50, height: 10, border: :thick, align: :center, padding: 2, title: {top: "#{city_name}"}) do
+"#{current_hour}\n#{description[0]}\n#{weather(description)}\n#{temp}\n#{clothes(temp)}"
+end
+
+puts box
